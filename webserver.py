@@ -24,8 +24,8 @@ def handle_connections(s):
 
     while 1:
         client, addr = s.accept()
-        handle_client(client, addr)
-        #Send to greenlet
+        gevent.spawn(handle_client, client, addr)
+        gevent.sleep(0)
         
 
 def handle_client(c, addr):
@@ -34,10 +34,10 @@ def handle_client(c, addr):
     '''
     print "Client {}:{} connected".format(addr[0], addr[1])
     msg = c.recv(MAX_MSG_LEN)
-    print "MSG from {}:{}".format(addr[0], addr[1])
+    print "MSG from {}:{}:".format(addr[0], addr[1])
     print msg
 
-    c.send("ACK")
+    c.send("ACK\n")
 
 def main():
 
@@ -45,7 +45,9 @@ def main():
     PORT = 8080
 
     s = init(HOST, PORT)
-    handle_connections(s)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    listen = gevent.spawn(handle_connections, s)
+    gevent.joinall([listen])
 
 if __name__ == '__main__':
     main()
