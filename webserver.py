@@ -34,12 +34,13 @@ def handle_client(c, addr):
     '''
     print "Client {}:{} connected".format(addr[0], addr[1])
     msg = "\n"
+    gevent.sleep(0)
     while msg:
         msg = c.recv(MAX_MSG_LEN)
         print "MSG from {}:{}:".format(addr[0], addr[1])
         print msg
         c.send("ACK\n")
-        greenlet.sleep(0)
+        gevent.sleep(0)
 
 def main():
 
