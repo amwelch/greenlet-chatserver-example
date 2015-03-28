@@ -33,11 +33,13 @@ def handle_client(c, addr):
     Prints out the client's message and acks the response
     '''
     print "Client {}:{} connected".format(addr[0], addr[1])
-    msg = c.recv(MAX_MSG_LEN)
-    print "MSG from {}:{}:".format(addr[0], addr[1])
-    print msg
-
-    c.send("ACK\n")
+    msg = "\n"
+    while msg:
+        msg = c.recv(MAX_MSG_LEN)
+        print "MSG from {}:{}:".format(addr[0], addr[1])
+        print msg
+        c.send("ACK\n")
+        greenlet.sleep(0)
 
 def main():
 
