@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import argparse
 import gevent
 import socket
 import fcntl
@@ -72,6 +73,7 @@ def parse_args():
 
 def main():
 
+    args = parse_args()
     s = init(args.addr, args.port)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     fcntl.fcntl(s, fcntl.F_SETFL, os.O_NONBLOCK)
