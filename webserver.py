@@ -60,13 +60,19 @@ def handle_client(c, addr):
                 print "socket error ", e
                 return
 
+def parse_args():
+    p = argparse.ArgumentParser(description = \
+    '''
+    Connect to a chatserver and send some messages
+    ''')
+    p.add_argument('--addr', type=str, default='localhost', help='addr to bind to')
+    p.add_argument('--port', type=int, default=8080, help='host to connect to')
+    return p.parse_args()
+
 
 def main():
 
-    HOST = "localhost"
-    PORT = 8080
-
-    s = init(HOST, PORT)
+    s = init(args.addr, args.port)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     fcntl.fcntl(s, fcntl.F_SETFL, os.O_NONBLOCK)
 
